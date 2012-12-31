@@ -37,8 +37,11 @@ In the _res/values-v7_ folder:
 Etc.<br>
 
 Initialize FrankenRobot, and embody the interface
-    FrankenRobot frank = Lab.build(getApplicationContext(), R.array.frankenrobot_interfaces, R.array.frankenrobot_concreate_classes);
+
+    FrankenRobot frank = Lab.build(getApplicationContext(), 
+            R.array.frankenrobot_interfaces, 
+            R.array.frankenrobot_concreate_classes);
     DeviceSpecific deviceSpecific = (DeviceSpecific) frank.embody(DeviceSpecific.class);
 
-Use it! It is guaranteed that the returned instance is the most suitable, based on the qualifier rules.
+It is guaranteed that the returned instance is the most suitable, based on the qualifier rules.<br>
 _AnySoftKeyboard_ achives impressive backword compatibility using this method, using API-level-bound implementations, with no complex coding, and no reflection.
