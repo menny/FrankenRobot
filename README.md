@@ -8,7 +8,7 @@ You can specify a different implementation for every imaginable resource qualifi
 This is how [AnySoftKeyboard](https://github.com/AnySoftKeyboard/AnySoftKeyboard) uses FrankenRobot:
 
 Add _[frankenrobot.jar](https://github.com/menny/FrankenRobot/raw/master/frankenrobot.jar)_ to the _libs_ folder of your Android project. Add it to the build path, if needed.<br>
-Create two _string-array_ resources in the _res/values_ folder (say, _frankenrobot.xml_ file):<br>
+Create two _string-array_ resources in the _res/values_ folder (say, in a designated _frankenrobot.xml_ file):<br>
 One for the interfaces definition
 
     <string-array name="frankenrobot_interfaces">
@@ -35,4 +35,10 @@ In the _res/values-v7_ folder:
     <string name="frankenrobot_device_specific_implementation">com.anysoftkeyboard.devicespecific.DeviceSpecific_V7</string>
 
 Etc.<br>
+
+Initialize FrankenRobot, and embody the interface
+    FrankenRobot frank = Lab.build(getApplicationContext(), R.array.frankenrobot_interfaces, R.array.frankenrobot_concreate_classes);
+    DeviceSpecific deviceSpecific = (DeviceSpecific) frank.embody(DeviceSpecific.class);
+
+Use it! It is guaranteed that the returned instance is the most suitable, based on the qualifier rules.
 _AnySoftKeyboard_ achives impressive backword compatibility using this method, using API-level-bound implementations, with no complex coding, and no reflection.
