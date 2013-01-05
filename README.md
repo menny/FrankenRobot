@@ -41,7 +41,8 @@ Initialize FrankenRobot, and embody the interface
     FrankenRobot frank = Lab.build(getApplicationContext(), 
             R.array.frankenrobot_interfaces, 
             R.array.frankenrobot_concreate_classes);
-    DeviceSpecific deviceSpecific = (DeviceSpecific) frank.embody(DeviceSpecific.class);
+    //using a diagram to create the monster
+    DeviceSpecific deviceSpecific = frank.embody(new FrankenRobot.Diagram<DeviceSpecific>(){});
 
 It is guaranteed that the returned instance is the most suitable, based on the qualifier rules.<br>
 _AnySoftKeyboard_ achives impressive backword compatibility using this method, using API-level-bound implementations, with no complex coding, and no reflection.
