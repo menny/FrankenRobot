@@ -1,16 +1,24 @@
 package net.evendanan.frankenrobot;
 
-/*
+/**
  * The injection entry point. This interface represents the builder.
  * Use the Lab.build method to create a concrete instance of this interface.
+ * @author menny
+ *
  */
 public interface FrankenRobot {
+
 	/**
-	 * Returns an instance of the specified type.
-	 * This type should be specified in the interfaces string-array, which was specified in the building of this object (see <tt>Lab</tt>).
+	 * Returns an instance of the specified type. This type should be specified
+	 * in the interfaces string-array, which was specified in the building of
+	 * this object (see <tt>Lab</tt>).
 	 * 
-	 * @param interfaceToEmbody the interface to create a concrete class for.
+	 * If the concrete class has a constructor which can take <tt>Diagram</tt> as an argument, then the provided
+	 * instance will be passed to it.
+	 * @param diagram
+	 *            an object implementing <tt>Diagram</tt>.
 	 * @see Lab
+	 * @see Diagram
 	 */
-	Object embody(Class<?> interfaceToEmbody);
+	<T> T embody(Diagram<T> diagram);
 }
