@@ -44,6 +44,8 @@ class FrankenRobotImpl implements FrankenRobot {
 				int concreateId = res.getIdentifier(
 						concretes[i].substring("@string/".length()), 
 						"string", appContext.getPackageName());
+				if (concreateId == 0)
+					throw new InvalidParameterException("Could not find a string resource with name "+concretes[i]);
 				concretes[i] = res.getString(concreateId);
 			}
 		}
@@ -74,6 +76,11 @@ class FrankenRobotImpl implements FrankenRobot {
 				throw new InvalidParameterException(
 						"Interface can not be an empty string! Interface at index "
 								+ i);
+			//when requesting getString, and the value is @null, the framework will return @0
+			//so I convert it to null. Note, that when requesting string-array, it will
+			//return as null! Ho, the confusion!
+			if ("@0".equals(actualClasses[i])) actualClasses[i] = null;
+			
 			// the implementation CAN be null!!
 			if (actualClasses[i] == null && Lab.LOG_DEBUG)
 				Log.d(TAG,
