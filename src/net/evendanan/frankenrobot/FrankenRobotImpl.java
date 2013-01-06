@@ -13,14 +13,50 @@ import android.util.Log;
 class FrankenRobotImpl implements FrankenRobot {
 
 	private static final String TAG = "FrankenRobotImpl";
-	private final HashMap<Class<?>, Class<?>> mMonsters;
+	private final HashMap<Class<?>, Class<?>> mMonsters = new HashMap<Class<?>, Class<?>>();
 
 	public FrankenRobotImpl(Context appContext, int interacesResId,
 			int concreteTypesResId) {
-		final Resources res = appContext.getResources();
-		String[] interfaces = res.getStringArray(interacesResId);
-		String[] actualClasses = res.getStringArray(concreteTypesResId);
+		Resources res = appContext.getResources();
+		init(res.getStringArray(interacesResId), res.getStringArray(concreteTypesResId));
+	}
+	
+	public FrankenRobotImpl(Context appContext, int interfacesAreMapping) {
+		Resources res = appContext.getResources();
+		String[] interfacesAreStrings = res.getStringArray(interfacesAreMapping);
+		
+		String[] interfaces = new String[interfacesAreStrings.length];
+		String[] concretes = new String[interfacesAreStrings.length];
+		
+		for(int i=0; i<interfacesAreStrings.length; i++) {
+			final String aMapping = interfacesAreStrings[i];
+			if (TextUtils.isEmpty(aMapping))
+				throw new InvalidParameterException("A mapping can not be empty!");
+			if (Lab.LOG_VERBOSE)
+				Log.d(TAG, "Raw mapping: "+aMapping);
+			String[] split = interfacesAreStrings[i].split(" is ");
+			if (split == null || split.length != 2)
+				throw new InvalidParameterException("interfacesAreMapping array should be in the format of 'interface is concrete'. Entry "+interfacesAreStrings[i]);
+			interfaces[i] = split[0];
+			concretes[i] = split[1];
+			//translating concrete if needed
+			if (concretes[i].startsWith("@string/")) {
+				int concreateId = res.getIdentifier(
+						concretes[i].substring("@string/".length()), 
+						"string", appContext.getPackageName());
+				concretes[i] = res.getString(concreateId);
+			}
+		}
+		
+		init(interfaces, concretes);
+	}
+	
+	public FrankenRobotImpl(String[] interfaces, String[] actualClasses) {
 		// basic sanity. More to follow.
+		init(interfaces, actualClasses);
+	}
+
+	protected void init(String[] interfaces, String[] actualClasses) {
 		if (interfaces == null || interfaces.length == 0)
 			throw new InvalidParameterException(
 					"interacesResId returned an empty interfaces list!");
@@ -46,7 +82,6 @@ class FrankenRobotImpl implements FrankenRobot {
 		}
 
 		// let's do some reflection
-		mMonsters = new HashMap<Class<?>, Class<?>>(interfaces.length);
 		for (int i = 0; i < interfaces.length; i++) {
 			final String anInterface = interfaces[i];
 			final String aConcreteClass = actualClasses[i];

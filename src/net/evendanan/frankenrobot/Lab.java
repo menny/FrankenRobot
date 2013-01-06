@@ -8,5 +8,9 @@ public class Lab {
 	
 	public static FrankenRobot build(Context appContext, int interacesResId, int concreteTypesResId) {
 		return new FrankenRobotImpl(appContext, interacesResId, concreteTypesResId);
+	}
+	
+	public static FrankenRobot build(Context appContext, int interfacesAreMapping) {
+		return new FrankenRobotImpl(appContext, interfacesAreMapping);
 	} 
 }
