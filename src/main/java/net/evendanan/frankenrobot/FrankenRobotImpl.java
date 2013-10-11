@@ -127,11 +127,17 @@ class FrankenRobotImpl implements FrankenRobot {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public <T> T embody(Diagram<T> diagram) {
-		final Class<?> interfaceToEmbody = diagram.getInterfaceToEmbody();
-		
+    @Override
+    public <T> T embody(Class<T> interfaceToEmbody) {
+        return embody(interfaceToEmbody, null);
+    }
+
+    @Override
+    public <T> T embody(Diagram<T> diagram) {
+        return embody(diagram.getInterfaceToEmbody(), diagram);
+    }
+
+	private <T> T embody(final Class<?> interfaceToEmbody, final Diagram<T> diagram) {
 		if (!mMonsters.containsKey(interfaceToEmbody))
 			throw new InvalidParameterException("The specified interface "
 					+ interfaceToEmbody.getName()
@@ -141,54 +147,41 @@ class FrankenRobotImpl implements FrankenRobot {
 		//As I said, I will allow NULL entries.
 		if (concreteClass == null)
 			return null;
-		
 		try {
-			Constructor<?> diagramConstructor;
+            Constructor<?> diagramConstructor = null;
 			try {
-				diagramConstructor = concreteClass.getConstructor(diagram.getClass());
+                if (diagram != null)
+                    diagramConstructor = concreteClass.getConstructor(diagram.getClass());
 			} catch(NoSuchMethodException e) {
 				diagramConstructor = null;
 			}
-			
-			if (diagramConstructor != null) {
-				//dev specified. It is required to instantiaze a specific constructor
-				try {
-					return (T) diagramConstructor.newInstance(diagram);
-				} catch (InstantiationException e) {
-					String message = "Failed to instantiaze concrete class "
-							+ concreteClass.getName()
-							+ " when requested interface "
-							+ interfaceToEmbody.getName()
-							+ " due to InstantiationException (is a contructor for Diagram exists?) with message "
-							+ e.getMessage();
-					Log.e(TAG, message);
-					throw new InvalidParameterException(message);
-				} catch (IllegalArgumentException e) {
-					//Ok... This is weird. I requested a specified constructor, provided that exactly
-					//specified arguments, and it fails.. weird.
-					String message = "Failed to instantiaze concrete class "
-							+ concreteClass.getName()
-							+ " when requested interface "
-							+ interfaceToEmbody.getName()
-							+ " due to IllegalArgumentException (it is weird. I have no tips for how to fix it.) with message "
-							+ e.getMessage();
-					Log.e(TAG, message);
-					throw new InvalidParameterException(message);
-				}
-			} else {
-				try {
-					return (T) concreteClass.newInstance();
-				} catch (InstantiationException e) {
-					String message = "Failed to instantiaze concrete class "
-							+ concreteClass.getName()
-							+ " when requested interface "
-							+ interfaceToEmbody.getName()
-							+ " due to InstantiationException (is a default contructor exists?) with message "
-							+ e.getMessage();
-					Log.e(TAG, message);
-					throw new InvalidParameterException(message);
-				}
-			}
+
+            try {
+                if (diagramConstructor != null)
+                    return (T) diagramConstructor.newInstance(diagram);
+                else
+                    return (T) concreteClass.newInstance();//default constructor
+            } catch (InstantiationException e) {
+                String message = "Failed to instantiaze concrete class "
+                        + concreteClass.getName()
+                        + " when requested interface "
+                        + interfaceToEmbody.getName()
+                        + " due to InstantiationException (is a contructor for Diagram exists?) with message "
+                        + e.getMessage();
+                Log.e(TAG, message);
+                throw new InvalidParameterException(message);
+            } catch (IllegalArgumentException e) {
+                //Ok... This is weird. I requested a specified constructor, provided that exactly
+                //specified arguments, and it fails.. weird.
+                String message = "Failed to instantiaze concrete class "
+                        + concreteClass.getName()
+                        + " when requested interface "
+                        + interfaceToEmbody.getName()
+                        + " due to IllegalArgumentException (it is weird. I have no tips for how to fix it.) with message "
+                        + e.getMessage();
+                Log.e(TAG, message);
+                throw new InvalidParameterException(message);
+            }
 		} catch (IllegalAccessException e) {
 			String message = "Failed to instantiaze concrete class "
 					+ concreteClass.getName()

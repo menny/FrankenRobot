@@ -1,5 +1,7 @@
 package net.evendanan.frankenrobot;
 
+import java.lang.Class;
+
 /**
  * The injection entry point. This interface represents the builder.
  * Use the Lab.build method to create a concrete instance of this interface.
@@ -21,4 +23,17 @@ public interface FrankenRobot {
 	 * @see Diagram
 	 */
 	<T> T embody(Diagram<T> diagram);
+
+    /**
+     * Returns an instance of the specified type. This type should be specified
+     * in the interfaces string-array, which was specified in the building of
+     * this object (see <tt>Lab</tt>).
+     *
+     * The default constructor will be used to create a concreate instance.
+     * @param interfaceToEmbody the Class representing the monster to create.
+     *
+     * @see Lab
+     * @see Diagram
+     */
+    <T> T embody(Class<T> interfaceToEmbody);
 }
