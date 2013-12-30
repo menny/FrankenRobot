@@ -3,7 +3,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.6.+'
+        classpath 'com.android.tools.build:gradle:0.7.+'
     }
 }
 
@@ -14,12 +14,12 @@ repositories {
     mavenCentral()
 }
 
-version '1.1'
+version '1.1.1'
 group 'net.evendanan'
 
 android {
-    compileSdkVersion 18
-    buildToolsVersion "18.1.0"
+    compileSdkVersion 19
+    buildToolsVersion "19.0.0"
 
     defaultConfig {
         minSdkVersion 3
@@ -28,7 +28,7 @@ android {
 }
 
 //how to publish: http://www.flexlabs.org/2013/06/using-local-aar-android-library-packages-in-gradle-builds
-//to local: mvn install:install-file -Dfile=build/libs/frankenrobot-1.1.aar -DgroupId=net.evendanan -DartifactId=frankenrobot -Dversion=1.1 -Dpackaging=aar
+//to local: mvn install:install-file -Dfile=build/libs/frankenrobot-1.1.1.aar -DgroupId=net.evendanan -DartifactId=frankenrobot -Dversion=1.1.1 -Dpackaging=aar
 
 dependencies {
 }
