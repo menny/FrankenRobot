@@ -9,11 +9,7 @@ buildscript {
 
 apply plugin: 'android-library'
 
-repositories {
-    mavenCentral()
-}
-
-version '1.1.1'
+version '1.1.2-SNAPSHOT'
 group 'net.evendanan'
 
 android {
@@ -23,11 +19,97 @@ android {
     defaultConfig {
         minSdkVersion 3
         targetSdkVersion 19
+
+        versionName project.version
+        versionCode 1
     }
 }
 
-//how to publish: http://www.flexlabs.org/2013/06/using-local-aar-android-library-packages-in-gradle-builds
-//to local: mvn install:install-file -Dfile=build/libs/frankenrobot-1.1.1.aar -DgroupId=net.evendanan -DartifactId=frankenrobot -Dversion=1.1.1 -Dpackaging=aar
+def isReleaseBuild() {
+    return version.contains("SNAPSHOT") == false
+}
+
+apply plugin: 'maven'
+apply plugin: 'signing'
+
+configurations {
+    archives {
+        extendsFrom configurations.default
+    }
+}
+
+signing {
+    required { isReleaseBuild() && gradle.taskGraph.hasTask("uploadArchives") }
+    sign configurations.archives
+}
+
+if (isReleaseBuild()) {
+    println 'RELEASE BUILD'
+    sonatypeRepositoryUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+} else {
+    println 'DEBUG BUILD'
+    sonatypeRepositoryUrl = "https://oss.sonatype.org/content/repositories/snapshots/"
+}
+
+uploadArchives {
+    configuration = configurations.archives
+    repositories.mavenDeployer {
+        beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+        repository(url: sonatypeRepositoryUrl) {
+            authentication(userName: sonatypeUsername,
+                    password: sonatypePassword)
+        }
+
+        pom.project {
+            name 'FrankenRobot'
+            packaging 'aar'
+            description 'A simple injection library for Android: uses Android resources qualification mechanism to map interfaces to concrete implementations.'
+            url 'https://github.com/menny/FrankenRobot'
+
+            scm {
+                url 'scm:git@github.com:menny/FrankenRobot.git'
+                connection 'scm:git@github.com:menny/FrankenRobot.git'
+                developerConnection 'scm:git@github.com:menny/FrankenRobot.git'
+            }
+
+            licenses {
+                license {
+                    name 'The Apache Software License, Version 2.0'
+                    url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    distribution 'repo'
+                }
+            }
+
+            developers {
+                developer {
+                    id 'menny'
+                    name 'Menny Even Danan'
+                    email 'menny@evendanan.net'
+                }
+            }
+        }
+    }
+}
+
+task androidJavadocs(type: Javadoc) {
+    source = android.sourceSets.main.allJava
+}
+
+task androidJavadocsJar(type: Jar) {
+    classifier = 'javadoc'
+    from androidJavadocs.destinationDir
+}
+
+task androidSourcesJar(type: Jar) {
+    classifier = 'sources'
+    from android.sourceSets.main.allSource
+}
+
+artifacts {
+    archives androidSourcesJar
+    archives androidJavadocsJar
+}
 
 dependencies {
 }
