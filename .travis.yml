@@ -2,8 +2,9 @@ language: java
 jdk: oraclejdk7
 env:
   matrix:
-    - ANDROID_SDKS=android-18,sysimg-18  ANDROID_TARGET=android-18  ANDROID_ABI=armeabi-v7a
+    - ANDROID_SDKS=android-19,sysimg-19  ANDROID_TARGET=android-19  ANDROID_ABI=armeabi-v7a
 before_install:
+  - sudo apt-get update -qq
   # Install base Android SDK
   - if [ `uname -m` = x86_64 ]; then sudo apt-get install -qq --force-yes libgd2-xpm ia32-libs ia32-libs-multiarch > /dev/null; fi
   - wget http://dl.google.com/android/android-sdk_r22.2.1-linux.tgz
