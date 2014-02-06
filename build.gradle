@@ -82,7 +82,6 @@ uploadArchives {
         println 'local.signing.properties file was not found.'
     }
 
-
     configuration = configurations.archives
     repositories.mavenDeployer {
         beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
