@@ -1,5 +1,7 @@
 #FrankenRobot#
 
+[![Build Status](https://travis-ci.org/menny/FrankenRobot.png?branch=master)](https://travis-ci.org/menny/FrankenRobot)
+
 A simple injection library for Android: uses [Android resources qualification mechanism](http://developer.android.com/guide/topics/resources/providing-resources.html#table2) to map interfaces to concrete implementations.<br>
 FrankenRobot takes two _string-array_ resources; one of canonical interface names, and the second of canonical concrete implementations.<br>
 You can specify a different implementation for every imaginable resource qualifier (be it API level, screen-size, locale, etc.), and FrankenRobot will instantize the most appropriate implementation using Android's resource qualifier mechanism.
