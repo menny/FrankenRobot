@@ -1,6 +1,6 @@
 #FrankenRobot#
 
-[![Build Status](https://api.shippable.com/projects/53723e25a39214aa0193d92c/badge/master)](https://www.shippable.com/projects/53723e25a39214aa0193d92c)
+[![Build Status](https://api.shippable.com/projects/540f735a21c97efdb898a1ae/badge?branchName=master)](https://app.shippable.com/projects/540f735a21c97efdb898a1ae/builds/latest)
 
 A simple injection library for Android: uses [Android resources qualification mechanism](http://developer.android.com/guide/topics/resources/providing-resources.html#table2) to map interfaces to concrete implementations.<br>
 FrankenRobot takes two _string-array_ resources; one of canonical interface names, and the second of canonical concrete implementations.<br>
