@@ -7,9 +7,25 @@ FrankenRobot takes two _string-array_ resources; one of canonical interface name
 You can specify a different implementation for every imaginable resource qualifier (be it API level, screen-size, locale, etc.), and FrankenRobot will instantize the most appropriate implementation using Android's resource qualifier mechanism.
 
 ##How To Use##
-This is how [AnySoftKeyboard](https://github.com/AnySoftKeyboard/AnySoftKeyboard) uses FrankenRobot:
+### Dependency ###
+I'm using [![JitPack](https://img.shields.io/github/release/menny/FrankenRobot.svg?label=JitPack)](https://jitpack.io/#menny/FrankenRobot) to publish this library.
 
-Add _[frankenrobot.jar](https://github.com/menny/FrankenRobot/raw/master/frankenrobot.jar)_ to the _libs_ folder of your Android project. Add it to the build path, if needed.<br>
+Add it in your build.gradle at the end of repositories:
+```
+repositories {
+    //...
+    maven { url "https://jitpack.io" }
+}
+```
+Step 2. Add the dependency in the form
+```
+dependencies {
+    compile 'com.github.menny:FrankenRobot:1.1.5'
+}
+```
+
+### Usage ###
+This is how [AnySoftKeyboard](https://github.com/AnySoftKeyboard/AnySoftKeyboard) uses FrankenRobot:
 Create two _string-array_ resources in the _res/values_ folder (say, in a designated _frankenrobot.xml_ file):<br>
 One for the interfaces definition
 
